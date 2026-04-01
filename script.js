@@ -23,11 +23,25 @@ function addBookToLibrary(title, author, num_pages, has_read) {
 function displayBooks() {
     const list = document.querySelector("#books-list");
     list.replaceChildren();
-    
+
     for (const book of library) {
         const listItem = document.createElement("li");
         listItem.classList.add("book");
         listItem.textContent = book.info();
         list.appendChild(listItem);
     }
+}
+
+function newBook() {
+    const form = document.querySelector("#bookForm");
+    const backdrop = document.querySelector("#formBackdrop")
+    form.classList.add("show-form");
+    backdrop.classList.add("show-form");
+}
+
+function closeForm() {
+    const form = document.querySelector("#bookForm");
+    const backdrop = document.querySelector("#formBackdrop")
+    form.classList.remove("show-form");
+    backdrop.classList.remove("show-form");
 }

@@ -1,10 +1,10 @@
 const library = [];
 
-function Book(title, author, num_pages, has_read) {
+function Book(title, author, num_pages, has_read = false) {
     if (!new.target) {
         throw error("Error: Must be used with the 'new' constructor");
     }
-    id: crypto.randomUUID;
+    this.id = crypto.randomUUID();
     this.title = title;
     this.author = author;
     this.num_pages = num_pages;
@@ -15,8 +15,12 @@ function Book(title, author, num_pages, has_read) {
     }
 }
 
-function addBookToLibrary(title, author, num_pages, has_read) {
-    const new_book = new Book(title, author, num_pages, has_read);
+function addBookToLibrary(bookData) {
+    const new_book = new Book();
+    for (let [key, value] of bookData) {
+        new_book[key] = value;
+    }
+
     library.push(new_book);
 }
 
@@ -32,16 +36,24 @@ function displayBooks() {
     }
 }
 
+const form = document.querySelector("#bookForm");
 function newBook() {
-    const form = document.querySelector("#bookForm");
     const backdrop = document.querySelector("#formBackdrop")
     form.classList.add("show-form");
     backdrop.classList.add("show-form");
 }
-
 function closeForm() {
-    const form = document.querySelector("#bookForm");
     const backdrop = document.querySelector("#formBackdrop")
     form.classList.remove("show-form");
     backdrop.classList.remove("show-form");
 }
+
+form.addEventListener("submit", (Event) => {
+    Event.preventDefault();
+    const data = new FormData(form);
+
+    addBookToLibrary(data)
+
+    closeForm();
+    displayBooks();
+});

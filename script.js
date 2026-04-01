@@ -24,6 +24,16 @@ function addBookToLibrary(bookData) {
     library.push(new_book);
 }
 
+function removeBookFromLibrary(book) {
+    const index = library.indexOf(book);
+    if (index > -1) {
+        const bookID = book.id;
+        library.splice(index, 1);
+
+        document.querySelector(`#book-${bookID}`).remove();
+    }
+}
+
 function displayBooks() {
     const list = document.querySelector("#books-list");
     list.replaceChildren();
@@ -31,7 +41,16 @@ function displayBooks() {
     for (const book of library) {
         const listItem = document.createElement("li");
         listItem.classList.add("book");
+        listItem.id = "book-" + book.id;
         listItem.textContent = book.info();
+
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "remove";
+        removeButton.addEventListener("click", () => {
+            removeBookFromLibrary(book);
+        });
+        listItem.appendChild(removeButton);
+
         list.appendChild(listItem);
     }
 }

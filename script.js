@@ -20,6 +20,14 @@ class Book {
     get info() {
         return `${this._title} by ${this._author}, ${this._num_pages} pages, ${this._has_read ? "has read" : "not read yet"}`;
     }
+
+    get has_read() {
+        return this._has_read;
+    }
+
+    toggleRead() {
+        this._has_read = !this._has_read;
+    }
 }
 
 function addBookToLibrary(bookData) {
@@ -44,19 +52,35 @@ function displayBooks() {
     list.replaceChildren();
 
     for (const book of library) {
-        const listItem = document.createElement("li");
-        listItem.classList.add("book");
-        listItem.id = "book-" + book.id;
-        listItem.textContent = book.info;
+        const bookContainer = document.createElement("li");
+        bookContainer.id = "book-" + book.id;
+        bookContainer.classList.add("bookContainer")
 
+        const bookText = document.createElement("p");
+        bookText.classList.add("book");
+        bookText.textContent = book.info;
+        bookContainer.appendChild(bookText);
+
+        const bookButtons = document.createElement("div");
+        bookButtons.classList.add("bookButtons");
+        
         const removeButton = document.createElement("button");
         removeButton.textContent = "remove";
         removeButton.addEventListener("click", () => {
             removeBookFromLibrary(book);
         });
-        listItem.appendChild(removeButton);
+        bookButtons.appendChild(removeButton);
 
-        list.appendChild(listItem);
+        const readButton = document.createElement("button");
+        readButton.textContent = "Toggle read status";
+        readButton.addEventListener("click", () => {
+            book.toggleRead();
+            bookText.textContent = book.info;
+        });
+        bookButtons.appendChild(readButton);
+
+        bookContainer.appendChild(bookButtons);
+        list.appendChild(bookContainer);
     }
 }
 

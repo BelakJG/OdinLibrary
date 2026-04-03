@@ -1,25 +1,30 @@
 const library = [];
 
-function Book(title, author, num_pages, has_read = false) {
-    if (!new.target) {
-        throw error("Error: Must be used with the 'new' constructor");
-    }
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.num_pages = num_pages;
-    this.has_read = has_read;
+class Book {
+    _id = crypto.randomUUID();
+    _title;
+    _author;
+    _num_pages;
+    _has_read = false;
 
-    this.info = function() {
-        return `${this.title} by ${this.author}, ${this.num_pages} pages, ${this.has_read ? "has read" : "not read yet"}`;
+    constructor(bookData) {
+        for (let [key, value] of bookData) {
+            this[key] = value;
+        }
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    get info() {
+        return `${this._title} by ${this._author}, ${this._num_pages} pages, ${this._has_read ? "has read" : "not read yet"}`;
     }
 }
 
 function addBookToLibrary(bookData) {
-    const new_book = new Book();
-    for (let [key, value] of bookData) {
-        new_book[key] = value;
-    }
+    console.log(bookData);
+    const new_book = new Book(bookData);
 
     library.push(new_book);
 }
@@ -42,7 +47,7 @@ function displayBooks() {
         const listItem = document.createElement("li");
         listItem.classList.add("book");
         listItem.id = "book-" + book.id;
-        listItem.textContent = book.info();
+        listItem.textContent = book.info;
 
         const removeButton = document.createElement("button");
         removeButton.textContent = "remove";
